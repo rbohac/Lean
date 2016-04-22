@@ -63,6 +63,7 @@
     <Compile Include="CustomSecurityInitializerAlgorithm.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DailyFXAlgorithm.cs" />
     <Compile Include="DelistingEventsAlgorithm.cs" />
     <Compile Include="DropboxBaseDataUniverseSelectionAlgorithm.cs" />
     <Compile Include="EquitiesLabAlgorithm.cs" />

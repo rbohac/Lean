@@ -58,6 +58,7 @@ namespace QuantConnect.Lean.Engine.DataFeeds
             switch (source.Format)
             {
                 case FileFormat.Csv:
+                case FileFormat.JSON:
                     return new TextSubscriptionFactory(config, date, isLiveMode);
 
                 case FileFormat.ZipEntryName:

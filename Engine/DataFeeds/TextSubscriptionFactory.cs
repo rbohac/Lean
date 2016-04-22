@@ -88,19 +88,32 @@ namespace QuantConnect.Lean.Engine.DataFeeds
                 {
                     // read a line and pass it to the base data factory
                     var line = reader.ReadLine();
-                    BaseData instance = null;
-                    try
+                    if (source.Format == FileFormat.JSON)
                     {
-                        instance  = _factory.Reader(_config, line, _date, _isLiveMode);
+                        // Handle JSON Object
+                        //var _result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<JObject>>(line);
+                        // = Newtonsoft.Json.JsonConvert.DeserializeObject(line);
+                        //foreach (var v in _result)
+                        {
+                            //yield return v;
+                        }
                     }
-                    catch (Exception err)
+                    else
                     {
-                        OnReaderError(line, err);
-                    }
+                        BaseData instance = null;
+                        try
+                        {
+                            instance = _factory.Reader(_config, line, _date, _isLiveMode);
+                        }
+                        catch (Exception err)
+                        {
+                            OnReaderError(line, err);
+                        }
 
-                    if (instance != null)
-                    {
-                        yield return instance;
+                        if (instance != null)
+                        {
+                            yield return instance;
+                        }
                     }
                 }
             }
