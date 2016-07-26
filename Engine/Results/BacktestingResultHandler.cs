@@ -396,6 +396,7 @@ namespace QuantConnect.Lean.Engine.Results
         /// <remarks>Async creates crashes in Mono 3.10 if the thread disappears before the upload is complete so it is disabled for now.</remarks>
         public void StoreResult(Packet packet, bool async = false)
         {
+           
             //Initialize:
             var serialized = "";
             var key = "";
@@ -416,6 +417,7 @@ namespace QuantConnect.Lean.Engine.Results
                         key = "backtests/" + _job.UserId + "/" + _job.ProjectId + "/" + _job.BacktestId + ".json";
 
                         //4. Serialize to JSON:
+                        Console.WriteLine("BackTesting.StoreResult "+packet.Channel+" / "+packet.Type.ToString());
                         serialized = JsonConvert.SerializeObject(result.Results);
                     }
                     else 
@@ -599,6 +601,7 @@ namespace QuantConnect.Lean.Engine.Results
         /// <param name="value">Value for the chart sample.</param>
         public void Sample(string chartName, string seriesName, int seriesIndex, SeriesType seriesType, DateTime time, decimal value, string unit = "$") 
         {
+            Console.WriteLine(String.Format("BacktestingResultHandler.SAMPLE: {0} / {1} {2} ({3}) -- {4} => {6}{5}",chartName, seriesName, seriesIndex, seriesType.ToString(), time,value,unit));
             lock (_chartLock)
             {
                 //Add a copy locally:

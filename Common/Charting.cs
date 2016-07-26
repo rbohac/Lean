@@ -134,6 +134,8 @@ namespace QuantConnect
         /// </summary>
         public List<ChartPoint> Values = new List<ChartPoint>();
 
+        public List<ChartPoint> ValuesHighRes = new List<ChartPoint>();
+
         /// <summary>
         /// Chart type for the series:
         /// </summary>
@@ -282,21 +284,31 @@ namespace QuantConnect
         /// <param name="liveMode">This is a live mode point</param>
         public void AddPoint(DateTime time, decimal value, bool liveMode = false)
         {
-            if (Values.Count >= 4000 && !liveMode)
-            {
-                // perform rate limiting in backtest mode
-                return;
-            }
+            Console.WriteLine(String.Format("Charting.AddPoint {0} {1}",time,value));
+            //if (Values.Count >= 4000 && !liveMode)
+            //{
+            //    // perform rate limiting in backtest mode
+            //    return;
+            //}
 
             var chartPoint = new ChartPoint(time, value);
             if (Values.Count > 0 && Values[Values.Count - 1].x == chartPoint.x)
             {
                 // duplicate points at the same time, overwrite the value
-                Values[Values.Count - 1] = chartPoint;
+                if (Values.Count < 4000 || liveMode)
+                {
+                    Values[Values.Count - 1] = chartPoint;
+                }
+                ValuesHighRes[ValuesHighRes.Count - 1] = chartPoint;
+              
             }
             else
             {
-                Values.Add(chartPoint);
+                if (Values.Count < 4000 || liveMode)
+                {
+                    Values.Add(chartPoint);
+                }
+                ValuesHighRes.Add(chartPoint);
             }
         }
 
