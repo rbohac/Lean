@@ -59,8 +59,8 @@ namespace QuantConnect.Algorithm.CSharp
         public void OnData(TradeBars data)
         {
             if (!data.ContainsKey(security)) { return; }
-            Log(String.Format("ALGORITHM {3},BB,{0},{1},{2}", bollingerBands.UpperBand, bollingerBands.MiddleBand, bollingerBands.LowerBand, Time.ToString("G")));
-
+            //Log(String.Format("ALGORITHM {3},BB,{0},{1},{2}", bollingerBands.UpperBand, bollingerBands.MiddleBand, bollingerBands.LowerBand, Time.ToString("G")));
+            Plot("BB", bollingerBands.UpperBand, bollingerBands.MiddleBand, bollingerBands.LowerBand);
         }
 
         private void OnDataFifteen(object sender, TradeBar consolidated)

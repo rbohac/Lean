@@ -193,6 +193,12 @@ namespace QuantConnect.Algorithm
             {
                 Debug("Exceeded maximum points per chart, data skipped.");
             }
+
+
+           
+            thisChart.SeriesHighRes[series].AddPoint(Time, value, _liveMode,true);
+            
+            Console.WriteLine(("Series Count "+ thisChart.SeriesHighRes[series].Values.Count+" - "+ thisChart.SeriesHighRes[series].Name));
         }
 
         /// <summary>

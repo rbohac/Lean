@@ -39,7 +39,7 @@ namespace QuantConnect
 
         /// List of Series Objects for this Chart:
         public Dictionary<string, Series> Series = new Dictionary<string, Series>();
-
+        public Dictionary<string, Series> SeriesHighRes = new Dictionary<string, Series>();
         /// <summary>
         /// Default constructor for chart:
         /// </summary>
@@ -78,6 +78,7 @@ namespace QuantConnect
             if (!Series.ContainsKey(series.Name))
             {
                 Series.Add(series.Name, series);
+                SeriesHighRes.Add(series.Name, series);
             }
             else 
             {
@@ -133,8 +134,6 @@ namespace QuantConnect
         /// These values are assumed to be in ascending time order (first points earliest, last points latest)
         /// </summary>
         public List<ChartPoint> Values = new List<ChartPoint>();
-
-        public List<ChartPoint> ValuesHighRes = new List<ChartPoint>();
 
         /// <summary>
         /// Chart type for the series:
@@ -282,33 +281,24 @@ namespace QuantConnect
         /// <param name="time">Time of the chart point</param>
         /// <param name="value">Value of the chart point</param>
         /// <param name="liveMode">This is a live mode point</param>
-        public void AddPoint(DateTime time, decimal value, bool liveMode = false)
+        public void AddPoint(DateTime time, decimal value, bool liveMode = false, bool highRes = false)
         {
             Console.WriteLine(String.Format("Charting.AddPoint {0} {1}",time,value));
-            //if (Values.Count >= 4000 && !liveMode)
-            //{
-            //    // perform rate limiting in backtest mode
-            //    return;
-            //}
+            if (Values.Count >= 4000 && !liveMode && !highRes)
+            {
+                // perform rate limiting in backtest mode
+                return;
+            }
 
             var chartPoint = new ChartPoint(time, value);
             if (Values.Count > 0 && Values[Values.Count - 1].x == chartPoint.x)
             {
                 // duplicate points at the same time, overwrite the value
-                if (Values.Count < 4000 || liveMode)
-                {
-                    Values[Values.Count - 1] = chartPoint;
-                }
-                ValuesHighRes[ValuesHighRes.Count - 1] = chartPoint;
-              
+                Values[Values.Count - 1] = chartPoint;
             }
             else
             {
-                if (Values.Count < 4000 || liveMode)
-                {
-                    Values.Add(chartPoint);
-                }
-                ValuesHighRes.Add(chartPoint);
+                Values.Add(chartPoint);
             }
         }
 
